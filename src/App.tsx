@@ -1,9 +1,29 @@
+import { useEffect, useState } from 'react';
 import Calculator from './components/Calculator';
 import { Home } from 'lucide-react';
+import TabShare from './components/share/TabShare';
+import MobileShare from './components/share/MobileShare';
 
 function App() {
+    const [deviceType, setDeviceType] = useState<"big" | "small">("big");
+
+  useEffect(() => {
+    const handleResize = () => {
+      setDeviceType(window.innerWidth < 1024 ? "small" : "big");
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-900 text-white">
+        {deviceType === "small" ? <MobileShare /> : <TabShare />}
       <header className="w-full py-6 px-4 sm:px-6 lg:px-8 bg-gray-800 border-b border-gray-700">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center">
           <div className="flex items-center mb-4 sm:mb-0">
